@@ -5,6 +5,10 @@ import Footer from './components/Footer'
 import Container from './components/Container'
 import SectionHeading from './components/SectionHeading'
 import ProductGrid from './components/ProductGrid'
+import CollectionTiles from './components/CollectionTiles'
+import Testimonials from './components/Testimonials'
+import BudgetCTA from './components/BudgetCTA'
+import Gallery from './components/Gallery'
 import { api, getUserId } from './lib/api'
 
 function Hero() {
@@ -49,24 +53,6 @@ function Hero() {
   )
 }
 
-function BudgetRow() {
-  const items = [
-    { title: 'Under ₹499', color: 'from-pink-100 to-rose-50' },
-    { title: 'Under ₹799', color: 'from-rose-100 to-amber-50' },
-    { title: 'Under ₹999', color: 'from-sky-100 to-pink-50' }
-  ]
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {items.map((i) => (
-        <motion.a key={i.title} href="/shop" whileHover={{ y: -3 }} className={`rounded-2xl border border-pink-100 p-6 bg-gradient-to-br ${i.color}`}>
-          <div className="text-lg font-semibold text-pink-900">{i.title}</div>
-          <div className="text-sm text-pink-900/70">Curated looks that don’t break the bank</div>
-        </motion.a>
-      ))}
-    </div>
-  )
-}
-
 export default function App() {
   const [products, setProducts] = useState([])
   const userId = getUserId()
@@ -87,12 +73,28 @@ export default function App() {
         </Container>
 
         <Container className="py-8">
+          <SectionHeading title="Curated collections" subtitle="Handpicked themes with real photos" />
+          <CollectionTiles />
+        </Container>
+
+        <Container className="py-8">
           <SectionHeading title="Best sellers" subtitle="Our most loved pieces" />
           <ProductGrid products={products.slice(0,8)} onAddToCart={addToCart} onWishlist={wish} />
         </Container>
 
         <Container className="py-8">
-          <BudgetRow />
+          <SectionHeading title="On a budget?" subtitle="Premium looks without the price pinch" />
+          <BudgetCTA />
+        </Container>
+
+        <Container className="py-8">
+          <SectionHeading title="From our community" subtitle="Happy parents, happier kids" />
+          <Testimonials />
+        </Container>
+
+        <Container className="py-8">
+          <SectionHeading title="Lookbook" subtitle="Pastel snapshots from recent shoots" />
+          <Gallery />
         </Container>
       </main>
       <Footer />
