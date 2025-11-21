@@ -1,73 +1,101 @@
-function App() {
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Container from './components/Container'
+import SectionHeading from './components/SectionHeading'
+import ProductGrid from './components/ProductGrid'
+import { api, getUserId } from './lib/api'
+
+function Hero() {
+  const banners = [
+    {
+      title: 'Pastel Dreams, Playful Hearts',
+      sub: 'Premium styles for your little trendsetters',
+      image: 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?q=80&w=1600&auto=format&fit=crop'
+    },
+    {
+      title: 'New Season • New Smiles',
+      sub: 'Soft hues, softer fabrics',
+      image: 'https://images.unsplash.com/photo-1516962126636-27ad087061cc?q=80&w=1600&auto=format&fit=crop'
+    },
+    {
+      title: 'Made for Twirls',
+      sub: 'Elegant silhouettes for girls & boys',
+      image: 'https://images.unsplash.com/photo-1680055195868-2b12621ac283?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxNYWRlJTIwZm9yJTIwVHdpcmxzfGVufDB8MHx8fDE3NjM3MjE5MzV8MA&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80'
+    }
+  ]
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % banners.length), 3500)
+    return () => clearInterval(t)
+  }, [])
+  const b = banners[idx]
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
-
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
+    <div className="relative overflow-hidden rounded-3xl border border-pink-100">
+      <motion.img key={b.image} src={b.image} alt="hero" className="h-[52vh] w-full object-cover" initial={{ opacity: 0, scale: 1.02 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} />
+      <div className="absolute inset-0 bg-gradient-to-t from-pink-900/30 to-transparent" />
+      <div className="absolute inset-0 flex items-end p-8 sm:p-12">
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="max-w-xl text-white">
+          <h1 className="text-3xl sm:text-5xl font-semibold drop-shadow">{b.title}</h1>
+          <p className="mt-2 sm:mt-3 text-sm sm:text-base opacity-90">{b.sub}</p>
+          <div className="mt-5 flex gap-3">
+            <a href="/shop" className="rounded-md bg-white/90 text-pink-900 px-4 py-2 text-sm font-medium hover:bg-white">Shop now</a>
+            <a href="/about" className="rounded-md bg-pink-100/80 text-pink-900 px-4 py-2 text-sm font-medium hover:bg-pink-100">Our story</a>
           </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   )
 }
 
-export default App
+function BudgetRow() {
+  const items = [
+    { title: 'Under ₹499', color: 'from-pink-100 to-rose-50' },
+    { title: 'Under ₹799', color: 'from-rose-100 to-amber-50' },
+    { title: 'Under ₹999', color: 'from-sky-100 to-pink-50' }
+  ]
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {items.map((i) => (
+        <motion.a key={i.title} href="/shop" whileHover={{ y: -3 }} className={`rounded-2xl border border-pink-100 p-6 bg-gradient-to-br ${i.color}`}>
+          <div className="text-lg font-semibold text-pink-900">{i.title}</div>
+          <div className="text-sm text-pink-900/70">Curated looks that don’t break the bank</div>
+        </motion.a>
+      ))}
+    </div>
+  )
+}
+
+export default function App() {
+  const [products, setProducts] = useState([])
+  const userId = getUserId()
+
+  useEffect(() => {
+    api.listProducts({}).then((d) => setProducts(d.items || [])).catch(() => setProducts([]))
+  }, [])
+
+  const addToCart = (p) => api.cart.add({ user_id: userId, product_id: p.id, quantity: 1 })
+  const wish = (p) => api.wishlist.add({ user_id: userId, product_id: p.id })
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 text-pink-900">
+      <Header />
+      <main>
+        <Container className="py-8 sm:py-12">
+          <Hero />
+        </Container>
+
+        <Container className="py-8">
+          <SectionHeading title="Best sellers" subtitle="Our most loved pieces" />
+          <ProductGrid products={products.slice(0,8)} onAddToCart={addToCart} onWishlist={wish} />
+        </Container>
+
+        <Container className="py-8">
+          <BudgetRow />
+        </Container>
+      </main>
+      <Footer />
+    </div>
+  )
+}
